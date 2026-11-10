@@ -1,0 +1,7 @@
+# Nur die fertige Seite und die Bilder gehen ins Repo
+*
+!index.html
+!README.md
+!bilder/
+!bilder/*.webp
+!.gitignore
