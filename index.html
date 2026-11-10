@@ -2019,9 +2019,13 @@ function bauErgaenzung() {
     // Inhalt sofort setzen und nur einblenden. Ein Kreuzblenden mit
     // onComplete verschluckt sich beim schnellen Durchklicken.
     f.innerHTML = s.formel; t.innerHTML = s.text;
-    if (RUHIG || !A.animate) { f.style.opacity = 1; f.style.transform = "none"; return; }
-    animate(f, { opacity:[0,1], translateY:[14*richtung, 0],
-                 duration:320, ease:"outQuad" });
+    f.style.opacity = 1;
+    if (RUHIG || !A.animate) { f.style.transform = "none"; return; }
+    // Bewusst nur schieben, nicht ein- und ausblenden: mehrere überlappende
+    // Deckkraft-Animationen können die Formel sonst unsichtbar stehen lassen.
+    if (zeigeSchritt._lauf && zeigeSchritt._lauf.cancel) zeigeSchritt._lauf.cancel();
+    zeigeSchritt._lauf = animate(f,
+      { translateY:[14*richtung, 0], duration:320, ease:"outQuad" });
     const neueTeile = f.querySelectorAll("b");
     if (neueTeile.length) animate(neueTeile,
       { scale:[1, 1.22, 1], duration:620, delay:150, ease:"outElastic(1, .6)" });
