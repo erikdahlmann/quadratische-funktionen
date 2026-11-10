@@ -1520,7 +1520,7 @@ function zeigeFortschritt(feiern) {
       : "Alles gelöst. Stark.";
   }
   if (feiern && !RUHIG && A.animate) {
-    animate(insel, { scale: [1, 1.08, 1] }, { duration: 420, ease: "outQuad" });
+    animate(insel, { scale: [1, 1.08, 1], duration: 420, ease: "outQuad" });
   }
 }
 
@@ -1734,7 +1734,7 @@ function bauNormalparabel() {
                 merkeGeloest("tab-normal"); }
     else { r.textContent = "Noch nicht alles richtig. Denk an x · x.";
            r.className = "rueckmeldung nein"; }
-    if (neu && !RUHIG) animate("#ks-normal", { scale:[1,1.012,1] }, { duration:360 });
+    if (neu && !RUHIG) animate("#ks-normal", { scale:[1,1.012,1], duration:360, ease:"outQuad" });
   });
   gesamtAufgaben++;
 }
@@ -1988,14 +1988,13 @@ function bauAblesen() {
       if (alle) {
         rueck.textContent = "Alles richtig."; rueck.className = "rueckmeldung ok";
         k.classList.add("geloest"); merkeGeloest(id);
-        if (!RUHIG) animate(k, { x:[0,0] }, { duration:1 });
       } else {
         const falsch = $$("input.falsch", k).length;
         rueck.textContent = falsch === 1
           ? "Ein Wert stimmt noch nicht. Schau dir den Lösungsweg an."
           : falsch + " Werte stimmen noch nicht.";
         rueck.className = "rueckmeldung nein";
-        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0] }, { duration:320 });
+        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0], duration:320, ease:"outQuad" });
       }
     });
   });
@@ -2017,18 +2016,15 @@ function bauErgaenzung() {
     stand.textContent = "Schritt " + (neu + 1) + " von " + D.qeSchritte.length;
     $("#qe-zurueck").disabled = neu === 0;
     $("#qe-vor").disabled = neu === D.qeSchritte.length - 1;
-    if (RUHIG || !A.animate) { f.innerHTML = s.formel; t.innerHTML = s.text; return; }
-    animate(f, { opacity:[1,0], translateY:[0, -8*richtung] }, {
-      duration:180, ease:"inQuad",
-      onComplete: () => {
-        f.innerHTML = s.formel; t.innerHTML = s.text;
-        animate(f, { opacity:[0,1], translateY:[10*richtung, 0] },
-          { duration:300, ease:"outQuad" });
-        const neueTeile = f.querySelectorAll("b");
-        if (neueTeile.length) animate(neueTeile,
-          { scale:[1, 1.22, 1], duration:620, delay:160, ease:"outElastic(1, .6)" });
-      }
-    });
+    // Inhalt sofort setzen und nur einblenden. Ein Kreuzblenden mit
+    // onComplete verschluckt sich beim schnellen Durchklicken.
+    f.innerHTML = s.formel; t.innerHTML = s.text;
+    if (RUHIG || !A.animate) { f.style.opacity = 1; f.style.transform = "none"; return; }
+    animate(f, { opacity:[0,1], translateY:[14*richtung, 0],
+                 duration:320, ease:"outQuad" });
+    const neueTeile = f.querySelectorAll("b");
+    if (neueTeile.length) animate(neueTeile,
+      { scale:[1, 1.22, 1], duration:620, delay:150, ease:"outElastic(1, .6)" });
   }
   $("#qe-vor").addEventListener("click", () => zeigeSchritt(Math.min(D.qeSchritte.length-1, schritt+1)));
   $("#qe-zurueck").addEventListener("click", () => zeigeSchritt(Math.max(0, schritt-1)));
@@ -2056,7 +2052,7 @@ function bauErgaenzung() {
     zeichnen.punkte.push({ x, y });
     const c = el("circle", { cx:ks.X(x), cy:ks.Y(y), r:5, class:"punkt-nutzer" });
     ks.gPunkte.appendChild(c);
-    if (!RUHIG) animate(c, { r:[0,5] }, { duration:300, ease:"outBack" });
+    if (!RUHIG) animate(c, { r:[0,5], duration:300, ease:"outBack" });
     if (zeichnen.punkte.length < 3) {
       hinweis.innerHTML = "Punkte gesetzt: <b>" + zeichnen.punkte.length +
         " von 3</b>. Die Punkte müssen verschieden sein.";
@@ -2176,7 +2172,7 @@ function bauErgaenzung() {
           ? "Der Scheitel-x stimmt noch nicht. Vorzeichen prüfen."
           : "Noch nicht richtig. Der Lösungsweg hilft.";
         rueck.className = "rueckmeldung nein";
-        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0] }, { duration:320 });
+        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0], duration:320, ease:"outQuad" });
       }
     });
     zeichenknopf.addEventListener("click", () => {
@@ -2220,7 +2216,7 @@ function bauNullstellen() {
       ks.gPunkte.appendChild(el("text", { x:ks.X(x), y:ks.Y(0)+22,
         "text-anchor":"middle", fill:"var(--gruen-schrift)",
         style:"font-family:var(--sans);font-size:11px;font-weight:700" }, zahl(x)));
-      if (!RUHIG) animate(c, { r:[0,5.5] }, { duration:420, ease:"outBack" });
+      if (!RUHIG) animate(c, { r:[0,5.5], duration:420, ease:"outBack" });
     });
     if (!f.loesungen.length) {
       ks.gPunkte.appendChild(el("text", { x:ks.X(0), y:ks.Y(ks.ymin)+(-18),
@@ -2280,7 +2276,7 @@ function bauNullstellen() {
       } else {
         rueck.textContent = "Noch nicht. Tipp: erst nach der Klammer auflösen, dann die Wurzel ziehen.";
         rueck.className = "rueckmeldung nein";
-        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0] }, { duration:320 });
+        if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0], duration:320, ease:"outQuad" });
       }
     });
   });
@@ -2588,7 +2584,7 @@ function bauZahlAufgabe(praefix, a) {
     rueck.textContent = ok ? "Richtig." : "Noch nicht. Die Lösung zeigt den Weg.";
     rueck.className = "rueckmeldung " + (ok ? "ok" : "nein");
     if (ok) { k.classList.add("geloest"); merkeGeloest(id); }
-    else if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0] }, { duration:320 });
+    else if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0], duration:320, ease:"outQuad" });
   });
   inp.addEventListener("keydown", e => { if (e.key === "Enter") $("button", k).click(); });
   return k;
@@ -2623,7 +2619,7 @@ function bauMC(id, nr, f, stufe) {
     } else {
       rueck.innerHTML = (f.hinweis || "Noch nicht.");
       rueck.className = "rueckmeldung nein";
-      if (!RUHIG) animate(b, { translateX:[0,-5,5,-3,0] }, { duration:300 });
+      if (!RUHIG) animate(b, { translateX:[0,-5,5,-3,0], duration:300, ease:"outQuad" });
     }
   }));
   return k;
@@ -2660,7 +2656,7 @@ function bauMehrfeld(id, a) {
     rueck.textContent = alle ? "Richtig." : "Noch nicht. Schau in die Lösung.";
     rueck.className = "rueckmeldung " + (alle ? "ok" : "nein");
     if (alle) { k.classList.add("geloest"); merkeGeloest(id); }
-    else if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0] }, { duration:320 });
+    else if (!RUHIG) animate(k, { translateX:[0,-5,5,-3,0], duration:320, ease:"outQuad" });
   });
   return k;
 }
@@ -2838,8 +2834,8 @@ function bauHero() {
     utils.set && utils.set(dr, { draw:"0 0" });
     animate(dr, { draw:["0 0","0 1"], duration:2200, ease:"inOutQuad", delay:420 });
   }
-  animate(scheitel, { opacity:[0,1], scale:[0,1] },
-    { duration:600, delay:2300, ease:"outElastic(1, .55)" });
+  animate(scheitel, { opacity:[0,1], scale:[0,1],
+    duration:600, delay:2300, ease:"outElastic(1, .55)" });
 }
 
 function bauAuftritte() {
