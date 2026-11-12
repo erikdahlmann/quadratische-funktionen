@@ -1,6 +1,6 @@
 # Quadratische Funktionen · Mathematik Klasse 9
 
-Live: https://erikdahlmann.github.io/quadratische-funktionen/
+Live: https://dm-pkg.de/quadratische-funktionen/
 
 Interaktive Lernseite zum schulinternen Lehrplan **9.2 Quadratische Funktionen**
 (17 UE) am Paul-Klee-Gymnasium Overath.
